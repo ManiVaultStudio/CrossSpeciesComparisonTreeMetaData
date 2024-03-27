@@ -32,6 +32,33 @@ void CrossSpeciesComparisonTreeMetaData::init()
 
 
 
+QString extractPropertyNames(QJsonObject _data) {
+    QStringList finalStringList;
+
+    // Get the keys of the main object
+    QStringList mainKeys = _data.keys();
+
+    if (!mainKeys.isEmpty()) {
+        // Get the first inner object
+        QJsonObject innerObject = _data.value(mainKeys.first()).toObject();
+
+        // Iterate over the keys of the inner object
+        for (const QString& innerKey : innerObject.keys()) {
+            QJsonObject innerInnerObject = innerObject.value(innerKey).toObject();
+            QStringList keys = innerInnerObject.keys();
+
+            // Add the keys to the final string
+            finalStringList.append(innerKey + ": " + keys.join(", "));
+        }
+    }
+
+    // Join the final string list with newlines
+    QString finalString = finalStringList.join("\n\n");
+
+    return finalString;
+}
+
+
 QStringList extractLeafNames(const QJsonObject& jsonObj) {
     QStringList keys = jsonObj.keys();
     return keys;
@@ -56,6 +83,9 @@ void CrossSpeciesComparisonTreeMetaData::setTreeMetaDataRaw(QJsonObject jsonStri
     _leafNames.clear();
     _leafNames = extractLeafNames(_data);
     _leafNames.sort();
+    _propertyNames = "";
+    _propertyNames = extractPropertyNames(_data);
+
     //std::cout<< "Species names: " << _speciesNames.join(", ").toStdString() << std::endl;
     //qDebug() << "**************************************************";
 }
@@ -73,6 +103,11 @@ QJsonObject& CrossSpeciesComparisonTreeMetaData::getTreeMetaDataRaw()
 QStringList& CrossSpeciesComparisonTreeMetaData::getTreeMetaLeafNamesRaw()
 {
     return _leafNames;
+}
+
+QString& CrossSpeciesComparisonTreeMetaData::getTreeMetaPropertyNamesRaw()
+{
+    return _propertyNames;
 }
 
 QIcon CrossSpeciesComparisonTreeMetaDataFactory::getIcon(const QColor& color /*= Qt::black*/) const
@@ -159,4 +194,9 @@ QJsonObject& CrossSpeciesComparisonTreeMeta::getTreeMetaData()
 QStringList& CrossSpeciesComparisonTreeMeta::getTreeMetaLeafNames()
 {
     return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaLeafNamesRaw();// TODO: insert return statement here
+}
+
+QString& CrossSpeciesComparisonTreeMeta::getTreeMetaPropertyNames()
+{
+    return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaPropertyNamesRaw();// TODO: insert return statement here
 }

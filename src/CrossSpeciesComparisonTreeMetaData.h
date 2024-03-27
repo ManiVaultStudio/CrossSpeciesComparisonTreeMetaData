@@ -36,10 +36,12 @@ public:
     void setTreeMetaLeafNamesRaw(QStringList jsonString);
     QJsonObject& getTreeMetaDataRaw();
     QStringList& getTreeMetaLeafNamesRaw();
+    QString& getTreeMetaPropertyNamesRaw();
 
 private:
     QJsonObject _data;
     QStringList _leafNames;
+    QString _propertyNames;
 };
 
 class  CROSSSPECIESCOMPARISONTREEMETADATA_EXPORT CrossSpeciesComparisonTreeMeta : public mv::DatasetImpl
@@ -120,6 +122,7 @@ public: // Selection
     void setTreeMetaLeafNames(QStringList jsonString);
     QJsonObject& getTreeMetaData();
     QStringList& getTreeMetaLeafNames();
+    QString& getTreeMetaPropertyNames();
     QSharedPointer<InfoAction>      _infoAction;
     std::vector<unsigned int> indices;
 

@@ -29,13 +29,13 @@ public: // Action getters
 
     StringAction& getTreeMetaInfoAction() { return _treeMetaInfoAction; }
     StringAction& getLeafInfoAction() { return _leafInfoAction; }
-    //StringAction& getPropertyInfoAction() { return _propertyInfoAction; }
+    StringAction& getPropertyInfoAction() { return _propertyInfoAction; }
 
 protected:
     Dataset<CrossSpeciesComparisonTreeMeta>       _clusters;                  /** Clusters dataset smart pointer */
     StringAction    _treeMetaInfoAction;
     StringAction    _leafInfoAction;
-    //StringAction    _propertyInfoAction;
+    StringAction    _propertyInfoAction;
 
     mv::EventListener     _eventListener;             /** Listen to HDPS events */
 };
