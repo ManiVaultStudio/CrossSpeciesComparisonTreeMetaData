@@ -31,24 +31,10 @@ void CrossSpeciesComparisonTreeMetaData::init()
 }
 
 
-void extractNames(const QJsonObject& obj, QStringList& names) {
-    if (obj.contains("name")) {
-        names.append(obj["name"].toString());
-    }
 
-    if (obj.contains("children")) {
-        QJsonArray children = obj["children"].toArray();
-        for (int i = 0; i < children.size(); ++i) {
-            QJsonObject child = children[i].toObject();
-            extractNames(child, names);
-        }
-    }
-}
-
-QStringList getNames(const QJsonObject& root) {
-    QStringList names;
-    extractNames(root, names);
-    return names;
+QStringList extractLeafNames(const QJsonObject& jsonObj) {
+    QStringList keys = jsonObj.keys();
+    return keys;
 }
 
 
@@ -67,16 +53,16 @@ void CrossSpeciesComparisonTreeMetaData::setTreeMetaDataRaw(QJsonObject jsonStri
     
     //qDebug() << "**************************************************";
     _data = jsonString;
-    _speciesNames.clear();
-    _speciesNames = getNames(_data);
-    _speciesNames.sort();
+    _leafNames.clear();
+    _leafNames = extractLeafNames(_data);
+    _leafNames.sort();
     //std::cout<< "Species names: " << _speciesNames.join(", ").toStdString() << std::endl;
     //qDebug() << "**************************************************";
 }
 
-void CrossSpeciesComparisonTreeMetaData::setTreeMetaSpeciesNamesRaw(QStringList jsonString)
+void CrossSpeciesComparisonTreeMetaData::setTreeMetaLeafNamesRaw(QStringList jsonString)
 {
-        _speciesNames = jsonString;
+    _leafNames = jsonString;
 }
 
 QJsonObject& CrossSpeciesComparisonTreeMetaData::getTreeMetaDataRaw()
@@ -84,9 +70,9 @@ QJsonObject& CrossSpeciesComparisonTreeMetaData::getTreeMetaDataRaw()
     return _data;
 }
 
-QStringList& CrossSpeciesComparisonTreeMetaData::getTreeMetaSpeciesNamesRaw()
+QStringList& CrossSpeciesComparisonTreeMetaData::getTreeMetaLeafNamesRaw()
 {
-    return _speciesNames;
+    return _leafNames;
 }
 
 QIcon CrossSpeciesComparisonTreeMetaDataFactory::getIcon(const QColor& color /*= Qt::black*/) const
@@ -161,16 +147,16 @@ void CrossSpeciesComparisonTreeMeta::setTreeMetaData(QJsonObject jsonString)
     //qDebug() << "%%3ItsSetting3%%";
     //getRawData<CrossSpeciesComparisonTreeMetaData>()->changed();
 }
-void CrossSpeciesComparisonTreeMeta::setTreeMetaSpeciesNames(QStringList jsonString)
+void CrossSpeciesComparisonTreeMeta::setTreeMetaLeafNames(QStringList jsonString)
 {
-    getRawData<CrossSpeciesComparisonTreeMetaData>()->setTreeMetaSpeciesNamesRaw(jsonString);
+    getRawData<CrossSpeciesComparisonTreeMetaData>()->setTreeMetaLeafNamesRaw(jsonString);
 }
 QJsonObject& CrossSpeciesComparisonTreeMeta::getTreeMetaData()
 {
     return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaDataRaw();// TODO: insert return statement here
 }
 
-QStringList& CrossSpeciesComparisonTreeMeta::getTreeMetaSpeciesNames()
+QStringList& CrossSpeciesComparisonTreeMeta::getTreeMetaLeafNames()
 {
-    return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaSpeciesNamesRaw();// TODO: insert return statement here
+    return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaLeafNamesRaw();// TODO: insert return statement here
 }
