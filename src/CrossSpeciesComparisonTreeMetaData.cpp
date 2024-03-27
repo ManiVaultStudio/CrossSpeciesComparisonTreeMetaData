@@ -31,24 +31,37 @@ void CrossSpeciesComparisonTreeMetaData::init()
 }
 
 
-void extractNames(const QJsonObject& obj, QStringList& names) {
-    if (obj.contains("name")) {
-        names.append(obj["name"].toString());
-    }
 
-    if (obj.contains("children")) {
-        QJsonArray children = obj["children"].toArray();
-        for (int i = 0; i < children.size(); ++i) {
-            QJsonObject child = children[i].toObject();
-            extractNames(child, names);
+QString extractPropertyNames(QJsonObject _data) {
+    QStringList finalStringList;
+
+    // Get the keys of the main object
+    QStringList mainKeys = _data.keys();
+
+    if (!mainKeys.isEmpty()) {
+        // Get the first inner object
+        QJsonObject innerObject = _data.value(mainKeys.first()).toObject();
+
+        // Iterate over the keys of the inner object
+        for (const QString& innerKey : innerObject.keys()) {
+            QJsonObject innerInnerObject = innerObject.value(innerKey).toObject();
+            QStringList keys = innerInnerObject.keys();
+
+            // Add the keys to the final string
+            finalStringList.append(innerKey + ": " + keys.join(", "));
         }
     }
+
+    // Join the final string list with newlines
+    QString finalString = finalStringList.join("\n\n");
+
+    return finalString;
 }
 
-QStringList getNames(const QJsonObject& root) {
-    QStringList names;
-    extractNames(root, names);
-    return names;
+
+QStringList extractLeafNames(const QJsonObject& jsonObj) {
+    QStringList keys = jsonObj.keys();
+    return keys;
 }
 
 
@@ -67,16 +80,19 @@ void CrossSpeciesComparisonTreeMetaData::setTreeMetaDataRaw(QJsonObject jsonStri
     
     //qDebug() << "**************************************************";
     _data = jsonString;
-    _speciesNames.clear();
-    _speciesNames = getNames(_data);
-    _speciesNames.sort();
+    _leafNames.clear();
+    _leafNames = extractLeafNames(_data);
+    _leafNames.sort();
+    _propertyNames = "";
+    _propertyNames = extractPropertyNames(_data);
+
     //std::cout<< "Species names: " << _speciesNames.join(", ").toStdString() << std::endl;
     //qDebug() << "**************************************************";
 }
 
-void CrossSpeciesComparisonTreeMetaData::setTreeMetaSpeciesNamesRaw(QStringList jsonString)
+void CrossSpeciesComparisonTreeMetaData::setTreeMetaLeafNamesRaw(QStringList jsonString)
 {
-        _speciesNames = jsonString;
+    _leafNames = jsonString;
 }
 
 QJsonObject& CrossSpeciesComparisonTreeMetaData::getTreeMetaDataRaw()
@@ -84,9 +100,14 @@ QJsonObject& CrossSpeciesComparisonTreeMetaData::getTreeMetaDataRaw()
     return _data;
 }
 
-QStringList& CrossSpeciesComparisonTreeMetaData::getTreeMetaSpeciesNamesRaw()
+QStringList& CrossSpeciesComparisonTreeMetaData::getTreeMetaLeafNamesRaw()
 {
-    return _speciesNames;
+    return _leafNames;
+}
+
+QString& CrossSpeciesComparisonTreeMetaData::getTreeMetaPropertyNamesRaw()
+{
+    return _propertyNames;
 }
 
 QIcon CrossSpeciesComparisonTreeMetaDataFactory::getIcon(const QColor& color /*= Qt::black*/) const
@@ -161,16 +182,21 @@ void CrossSpeciesComparisonTreeMeta::setTreeMetaData(QJsonObject jsonString)
     //qDebug() << "%%3ItsSetting3%%";
     //getRawData<CrossSpeciesComparisonTreeMetaData>()->changed();
 }
-void CrossSpeciesComparisonTreeMeta::setTreeMetaSpeciesNames(QStringList jsonString)
+void CrossSpeciesComparisonTreeMeta::setTreeMetaLeafNames(QStringList jsonString)
 {
-    getRawData<CrossSpeciesComparisonTreeMetaData>()->setTreeMetaSpeciesNamesRaw(jsonString);
+    getRawData<CrossSpeciesComparisonTreeMetaData>()->setTreeMetaLeafNamesRaw(jsonString);
 }
 QJsonObject& CrossSpeciesComparisonTreeMeta::getTreeMetaData()
 {
     return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaDataRaw();// TODO: insert return statement here
 }
 
-QStringList& CrossSpeciesComparisonTreeMeta::getTreeMetaSpeciesNames()
+QStringList& CrossSpeciesComparisonTreeMeta::getTreeMetaLeafNames()
 {
-    return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaSpeciesNamesRaw();// TODO: insert return statement here
+    return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaLeafNamesRaw();// TODO: insert return statement here
+}
+
+QString& CrossSpeciesComparisonTreeMeta::getTreeMetaPropertyNames()
+{
+    return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaPropertyNamesRaw();// TODO: insert return statement here
 }
