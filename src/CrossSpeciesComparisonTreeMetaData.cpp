@@ -112,7 +112,7 @@ QString& CrossSpeciesComparisonTreeMetaData::getTreeMetaPropertyNamesRaw()
 
 QIcon CrossSpeciesComparisonTreeMetaDataFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return Application::getIconFont("FontAwesome").getIcon("file-contract", color);
+    return Application::getIconFont("FontAwesome").getIcon("table", color);
 }
 
 mv::plugin::RawData* CrossSpeciesComparisonTreeMetaDataFactory::produce()
