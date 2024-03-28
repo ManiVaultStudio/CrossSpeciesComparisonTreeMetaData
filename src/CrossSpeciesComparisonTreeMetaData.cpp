@@ -1,7 +1,7 @@
 #include "CrossSpeciesComparisonTreeMetaData.h"
 #include "InfoAction.h"
 #include <Application.h>
-
+#include <util/Serialization.h>
 #include <QtCore>
 #include <QtDebug>
 #include <QJsonObject>
@@ -112,7 +112,7 @@ QString& CrossSpeciesComparisonTreeMetaData::getTreeMetaPropertyNamesRaw()
 
 QIcon CrossSpeciesComparisonTreeMetaDataFactory::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return Application::getIconFont("FontAwesome").getIcon("file-contract", color);
+    return Application::getIconFont("FontAwesome").getIcon("table", color);
 }
 
 mv::plugin::RawData* CrossSpeciesComparisonTreeMetaDataFactory::produce()
@@ -199,4 +199,15 @@ QStringList& CrossSpeciesComparisonTreeMeta::getTreeMetaLeafNames()
 QString& CrossSpeciesComparisonTreeMeta::getTreeMetaPropertyNames()
 {
     return  getRawData<CrossSpeciesComparisonTreeMetaData>()->getTreeMetaPropertyNamesRaw();// TODO: insert return statement here
+}
+
+void CrossSpeciesComparisonTreeMeta::fromVariantMap(const QVariantMap& variantMap)
+{
+
+
+}
+
+QVariantMap CrossSpeciesComparisonTreeMeta::toVariantMap() const
+{
+    return QVariantMap();
 }
