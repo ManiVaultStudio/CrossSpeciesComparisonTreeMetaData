@@ -130,7 +130,7 @@ void CrossSpeciesComparisonTreeMeta::init()
 
 QIcon CrossSpeciesComparisonTreeMeta::getIcon(const QColor& color /*= Qt::black*/) const
 {
-    return Application::getIconFont("FontAwesome").getIcon("sitemap", color);
+    return Application::getIconFont("FontAwesome").getIcon("table", color);
 }
 
 std::vector<std::uint32_t>& CrossSpeciesComparisonTreeMeta::getSelectionIndices()
