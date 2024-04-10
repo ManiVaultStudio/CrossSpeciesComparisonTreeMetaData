@@ -333,19 +333,19 @@ QString& CrossSpeciesComparisonTreeMeta::getTreeMetaPropertyNames()
 
 void CrossSpeciesComparisonTreeMeta::fromVariantMap(const QVariantMap& variantMap)
 {
-    /*DatasetImpl::fromVariantMap(variantMap);
+    DatasetImpl::fromVariantMap(variantMap);
 
     getRawData<CrossSpeciesComparisonTreeMetaData>()->fromVariantMap(variantMap);
 
-    events().notifyDatasetDataChanged(this);*/
+    events().notifyDatasetDataChanged(this);
 
 }
 
 QVariantMap CrossSpeciesComparisonTreeMeta::toVariantMap() const
 {
     auto variantMap = DatasetImpl::toVariantMap();
-    /*
+
     variantMap["Data"] = getRawData<CrossSpeciesComparisonTreeMetaData>()->toVariantMap();
-    */
+
     return variantMap;
 }
