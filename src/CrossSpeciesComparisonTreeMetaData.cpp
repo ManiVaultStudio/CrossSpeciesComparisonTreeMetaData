@@ -24,6 +24,27 @@ CrossSpeciesComparisonTreeMetaData::~CrossSpeciesComparisonTreeMetaData(void)
 
 }
 
+
+void CrossSpeciesComparisonTreeMetaData::fromVariantMap(const QVariantMap& variantMap)
+{
+    RawData::fromVariantMap(variantMap);
+
+    if (variantMap.contains("CSV:TreeMetaData")) {
+        QJsonDocument doc = QJsonDocument::fromJson(variantMap["CSV:TreeMetaData"].toByteArray());
+        setTreeMetaDataRaw(doc.object());
+    }
+}
+
+QVariantMap CrossSpeciesComparisonTreeMetaData::toVariantMap() const
+{
+    QVariantMap variantMap = RawData::toVariantMap();
+
+    QJsonDocument doc(_data);
+
+    variantMap["CSV:TreeMetaData"] = doc.toJson();
+    return variantMap;
+}
+
 void CrossSpeciesComparisonTreeMetaData::init()
 {
 
@@ -203,11 +224,17 @@ QString& CrossSpeciesComparisonTreeMeta::getTreeMetaPropertyNames()
 
 void CrossSpeciesComparisonTreeMeta::fromVariantMap(const QVariantMap& variantMap)
 {
+    DatasetImpl::fromVariantMap(variantMap);
 
-
+    getRawData<CrossSpeciesComparisonTreeMetaData>()->fromParentVariantMap(variantMap);
+    events().notifyDatasetDataSelectionChanged(this);
 }
 
 QVariantMap CrossSpeciesComparisonTreeMeta::toVariantMap() const
 {
-    return QVariantMap();
+    auto variantMap = DatasetImpl::toVariantMap();
+
+    getRawData<CrossSpeciesComparisonTreeMetaData>()->insertIntoVariantMap(variantMap);
+
+    return variantMap;
 }
