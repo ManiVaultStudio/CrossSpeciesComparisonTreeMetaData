@@ -1,5 +1,5 @@
 #pragma once
-#include "crossspeciescomparisonTreeMetadata_export.h"
+#include "CrossSpeciesComparisonTreeMetaData_export.h"
 #include <RawData.h>
 #include <Set.h>
 #include <QJsonObject>
