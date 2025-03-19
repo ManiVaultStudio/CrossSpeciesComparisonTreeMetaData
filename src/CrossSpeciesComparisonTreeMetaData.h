@@ -165,7 +165,7 @@ class CrossSpeciesComparisonTreeMetaDataFactory : public RawDataFactory
             FILE  "CrossSpeciesComparisonTreeMetaData.json")
 
 public:
-    CrossSpeciesComparisonTreeMetaDataFactory(void) {}
+    CrossSpeciesComparisonTreeMetaDataFactory(void);
     ~CrossSpeciesComparisonTreeMetaDataFactory(void) override {}
 
     mv::plugin::RawData* produce() override;
